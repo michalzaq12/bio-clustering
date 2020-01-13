@@ -62,6 +62,7 @@ public class Main {
 
 
         NJ nj = new NJ(distanceMatrix, clusters);
+        nj.run();
 
 //        while (clusters.size() > 1){
 //            Pair<Cluster, Cluster> smallest = distanceMatrix.getNodesWithSmallestDistance();
