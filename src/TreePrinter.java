@@ -14,7 +14,7 @@ public class TreePrinter {
 
     private void print(StringBuilder buffer, String prefix, String childrenPrefix) {
         buffer.append(prefix);
-        buffer.append(this.root.toString());
+        buffer.append(this.root.getLabelWithDistance());
         buffer.append('\n');
 
         Node child1 = this.root.getChild1();

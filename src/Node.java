@@ -4,6 +4,8 @@ public class Node {
     private Node child1 = null;
     private Node child2 = null;
 
+    private double distanceToParent = 0.0;
+
     public Node(String label){
         this.label = label;
     }
@@ -22,6 +24,19 @@ public class Node {
 
     public Node getChild2() {
         return child2;
+    }
+
+    public void setDistanceToParent(double distance){
+        this.distanceToParent = distance;
+    }
+
+    public String getDistanceToParent(){
+        if(distanceToParent > 0.0) return " (" + distanceToParent + ")";
+        else return "";
+    }
+
+    public String getLabelWithDistance(){
+        return label + this.getDistanceToParent();
     }
 
     @Override

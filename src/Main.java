@@ -82,7 +82,7 @@ public class Main {
 //            clusters.add(newCluster);
 //        }
 //
-//        System.out.println("end");
+//        System.out.println("end" + clusters);
 //
 //        printTree(clusters.get(0).getRoot());
     }

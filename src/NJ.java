@@ -1,8 +1,6 @@
 import javafx.util.Pair;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class NJ {
@@ -19,7 +17,7 @@ public class NJ {
 
     public void run() {
 
-        int n = 5;
+        int n = this.size;
         while (n > 2) {
             DistanceMatrix oldDistances = distances;
 
@@ -27,24 +25,26 @@ public class NJ {
 
             Pair<Cluster, Cluster> smallestDistance = qValues.getNodesWithSmallestDistance(true);
 
-            System.out.println("SMALLEST: " + smallestDistance.getKey() + " " + smallestDistance.getValue());
-            //TODO
-            Cluster newCluster = updateClusters(oldDistances, smallestDistance.getKey(), smallestDistance.getValue());
+            Cluster cluster1 = smallestDistance.getKey();
+            Cluster cluster2 = smallestDistance.getValue();
+
+            System.out.println("SMALLEST: " + cluster1 + " " + cluster2);
+            Cluster newCluster = updateClusters(oldDistances, cluster1, cluster2);
+            updateDistances(oldDistances, newCluster, cluster1, cluster2);
 
             n--;
-            //TODO
-            updateDistances(oldDistances, newCluster, smallestDistance.getKey(), smallestDistance.getValue() );
-
             System.out.println("#-------------------------------------------------------------------------------------------");
         }
 
 
-        Node node = clusters.get(1).getRoot();
-        //node.setDistanceToParent(distances.getData()[0][1]);//only one distance is left
-        clusters.get(0).getRoot().addChild(node);
+        Node subTree = clusters.get(1).getRoot();
+        double lastNodeDistance = distances.getMatrix().get(new Pair<>(clusters.get(0), clusters.get(1)));
+        Node root = clusters.get(0).getRoot();
+        root.setDistanceToParent(lastNodeDistance);
+        root.addChild(subTree);
 
 
-        TreePrinter printer = new TreePrinter(clusters.get(0).getRoot());
+        TreePrinter printer = new TreePrinter(root);
         System.out.print(printer.toString());
 
     }
@@ -52,7 +52,6 @@ public class NJ {
 
     private DistanceMatrix calculateQValues(DistanceMatrix initialDistance) {
         DistanceMatrix qValues = new DistanceMatrix();
-        System.out.println("size: " + initialDistance.size());
 
         for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : initialDistance.getMatrix().entrySet()) {
             Pair<Cluster,Cluster> clusters = entry.getKey();
@@ -68,7 +67,6 @@ public class NJ {
                 if(clusters.getValue().equals(clusters2.getKey())) sum2+= entry2.getValue();
             }
             double q = (initialDistance.size() - 2) * distance - sum1 - sum2;
-            System.out.println(clusters.getKey() + " " + clusters.getValue() + " distance:" + distance + " sum1:" + sum1 + " sum2:" + sum2 + "  q=" + q);
             qValues.add(clusters.getKey(), clusters.getValue(), q);
         }
 
@@ -77,18 +75,17 @@ public class NJ {
 
 
     private Cluster updateClusters(DistanceMatrix oldDistances, Cluster cluster1, Cluster cluster2){
-        //TODO set distance
-//        Node fNode = clusters[f].getRootNode();
-//        Node gNode = clusters[g].getRootNode();
-//        double[] distances = distancesToNewNode(oldDistances, f, g);
-//        fNode.setDistanceToParent(distances[0]);
-//        gNode.setDistanceToParent(distances[1]);
+        Node node1 = cluster1.getRoot();
+        Node node2 = cluster2.getRoot();
+        double[] distances = getDistancesToNode(oldDistances, cluster1, cluster2);
+        node1.setDistanceToParent(distances[0]);
+        node2.setDistanceToParent(distances[1]);
 
-        Node node = new Node();
-        node.addChild(cluster1.getRoot());
-        node.addChild(cluster2.getRoot());
+        Node newNode = new Node();
+        newNode.addChild(node1);
+        newNode.addChild(node2);
 
-        Cluster newCluster = new Cluster(cluster1, cluster2, node);
+        Cluster newCluster = new Cluster(cluster1, cluster2, newNode);
 
         clusters.remove(cluster1);
         clusters.remove(cluster2);
@@ -110,40 +107,41 @@ public class NJ {
 
             if(!x.equals(cluster1) && !x.equals(cluster2) &&
                     !y.equals(cluster1) && !y.equals(cluster2) ){
-                System.out.println("add without change " + x + " = " + y);
+                // REWRITE
                 Double distance = matrix.get(new Pair<>(x, y));
                 newDistances.add(x, y, distance);
             }else if ((!x.equals(cluster1) && !x.equals(cluster2)) ||
                     (!y.equals(cluster1) && !y.equals(cluster2))) {
                 Cluster v = (x.equals(cluster1) || x.equals(cluster2)) ? y : x;
-                System.out.println("ELSE (override)" + entry.getKey() + " = " + entry.getValue() + " = " + v);
+                // UPDATE
                 Double dis1 = matrix.get(new Pair<>(cluster1, v));
-                System.out.println(dis1);
                 Double dis2 = matrix.get(new Pair<>(cluster2, v));
-                System.out.println(dis2);
                 Double pairDis = matrix.get(new Pair<>(cluster1, cluster2));
-                System.out.println("PairDis: " + pairDis);
                 Double newDistance = (dis1 + dis2 - pairDis) / 2.0;
-                System.out.println("newDistance " + newDistance);
                 newDistances.add(newCluster, v, newDistance);
             }
 
 
         }
-
         newDistances.add(newCluster, newCluster, 0.0);
-
-//        System.out.println(newDistances.getMatrix());
-//        System.out.println(newDistances.size());
-//
-//        for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : newDistances.getMatrix().entrySet()) {
-//            Cluster x = entry.getKey().getKey();
-//            Cluster y = entry.getKey().getValue();
-//            System.out.println(x + " " + y + " = " + entry.getValue());
-//        }
-
-
         this.distances = newDistances;
+    }
+
+
+
+    private double[] getDistancesToNode(DistanceMatrix distances, Cluster cluster1, Cluster cluster2){
+        double distance = distances.getMatrix().get(new Pair<>(cluster1, cluster2));
+        double sum1 = 0.0;
+        double sum2 = 0.0;
+        for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : distances.getMatrix().entrySet()) {
+            Cluster x = entry.getKey().getKey();
+            if(x.equals(cluster1)) sum1+= entry.getValue();
+            if(x.equals(cluster2)) sum2+= entry.getValue();
+        }
+        double node1Dis = ((1.0d / 2) * distance) + (1.0d / (2.0d * (distances.size() - 2))) * (sum1 - sum2);
+        double node2Dis = distance - node1Dis;
+
+        return new double[]{node1Dis, node2Dis};
     }
 
 

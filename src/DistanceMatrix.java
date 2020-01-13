@@ -22,15 +22,12 @@ public class DistanceMatrix {
         Pair<Cluster, Cluster> out = null;
         Double val = Double.MAX_VALUE;
 
-        System.out.println("\n getting smallest distance");
-
         for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : matrix.entrySet()) {
             if(entry.getValue() < val && (allowNegative || entry.getValue() > 0)) {
                 val = entry.getValue();
                 out = entry.getKey();
             }
-            System.out.println(entry.getKey() + " = " + entry.getValue());
-    }
+        }
 
         return out;
     }
