@@ -1,5 +1,5 @@
 public class Node {
-    private String label = "BRANCH";
+    private String label = "•";
 
     private Node child1 = null;
     private Node child2 = null;

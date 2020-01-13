@@ -16,12 +16,10 @@ public class Main {
 
 
 
-    public static void printTree(Node node, String prefix){
+    public static void printTree(Node node){
         if(node == null) return;
-        String prefixChar = "-";
-        System.out.println(prefix + "+ " + node);
-        printTree(node.getChild1(), prefix + prefixChar);
-        printTree(node.getChild2(), prefix + prefixChar);
+        TreePrinter printer = new TreePrinter(node);
+        System.out.print(printer);
     }
 
     public static void upgma(){
@@ -100,6 +98,6 @@ public class Main {
 
         System.out.println("end");
 
-        printTree(clusters.get(0).getRoot(), "|");
+        printTree(clusters.get(0).getRoot());
     }
 }
