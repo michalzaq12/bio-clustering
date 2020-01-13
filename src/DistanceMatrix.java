@@ -14,15 +14,18 @@ public class DistanceMatrix {
     }
 
 
-
     public Pair<Cluster, Cluster> getNodesWithSmallestDistance(){
+        return this.getNodesWithSmallestDistance(false);
+    }
+
+    public Pair<Cluster, Cluster> getNodesWithSmallestDistance(boolean allowNegative){
         Pair<Cluster, Cluster> out = null;
         Double val = Double.MAX_VALUE;
 
         System.out.println("\n getting smallest distance");
 
         for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : matrix.entrySet()) {
-            if(entry.getValue() < val && entry.getValue() > 0) {
+            if(entry.getValue() < val && (allowNegative || entry.getValue() > 0)) {
                 val = entry.getValue();
                 out = entry.getKey();
             }
@@ -62,4 +65,14 @@ public class DistanceMatrix {
 
         this.matrix.putAll(valuesToAdd);
     }
+
+
+    public Map<Pair<Cluster, Cluster>, Double> getMatrix() {
+        return matrix;
+    }
+
+    public int size(){
+        return (int) Math.sqrt(this.matrix.size());
+    }
+
 }

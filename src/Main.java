@@ -27,7 +27,7 @@ public class Main {
         ArrayList<Cluster> clusters = new ArrayList<>();
 
 
-        File file = new File("distanceMatrix.txt");
+        File file = new File("nj.txt");
 
         try{
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -61,43 +61,28 @@ public class Main {
         }
 
 
-//        Node a = new Node("A");
-//        Node b = new Node("B");
-//        Node c = new Node("C");
+        NJ nj = new NJ(distanceMatrix, clusters);
+
+//        while (clusters.size() > 1){
+//            Pair<Cluster, Cluster> smallest = distanceMatrix.getNodesWithSmallestDistance();
 //
-//        Cluster cA = new Cluster(a);
-//        Cluster cB = new Cluster(b);
-//        Cluster cC = new Cluster(c);
+//            Cluster cluster1 = smallest.getKey();
+//            Cluster cluster2 = smallest.getValue();
 //
-//        clusters.add(cA);
-//        clusters.add(cB);
-//        clusters.add(cC);
+//            System.out.println(cluster1 + " " + cluster2);
 //
-//        distanceMatrix.add(cA, cB, 3.0);
-//        distanceMatrix.add(cB, cC, 6.0);
-//        distanceMatrix.add(cA, cC, 6.0);
-
-
-        while (clusters.size() > 1){
-            Pair<Cluster, Cluster> smallest = distanceMatrix.getNodesWithSmallestDistance();
-
-            Cluster cluster1 = smallest.getKey();
-            Cluster cluster2 = smallest.getValue();
-
-            System.out.println(cluster1 + " " + cluster2);
-
-            Node branch1 = new Node();
-            branch1.addChild(cluster1.getRoot());
-            branch1.addChild(cluster2.getRoot());
-            Cluster newCluster = new Cluster(cluster1, cluster2, branch1);
-            distanceMatrix.update(cluster1, cluster2, newCluster);
-            clusters.remove(cluster1);
-            clusters.remove(cluster2);
-            clusters.add(newCluster);
-        }
-
-        System.out.println("end");
-
-        printTree(clusters.get(0).getRoot());
+//            Node branch1 = new Node();
+//            branch1.addChild(cluster1.getRoot());
+//            branch1.addChild(cluster2.getRoot());
+//            Cluster newCluster = new Cluster(cluster1, cluster2, branch1);
+//            distanceMatrix.update(cluster1, cluster2, newCluster);
+//            clusters.remove(cluster1);
+//            clusters.remove(cluster2);
+//            clusters.add(newCluster);
+//        }
+//
+//        System.out.println("end");
+//
+//        printTree(clusters.get(0).getRoot());
     }
 }
