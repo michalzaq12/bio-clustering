@@ -30,13 +30,17 @@ public class Node {
         this.distanceToParent = distance;
     }
 
-    public String getDistanceToParent(){
+    private String printDistanceToParent(){
         if(distanceToParent > 0.0) return " (" + distanceToParent + ")";
         else return "";
     }
 
+    public double getDistanceToParent(){
+        return this.distanceToParent;
+    }
+
     public String getLabelWithDistance(){
-        return label + this.getDistanceToParent();
+        return label + this.printDistanceToParent();
     }
 
     @Override

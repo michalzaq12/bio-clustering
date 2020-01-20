@@ -27,7 +27,7 @@ public class Main {
         ArrayList<Cluster> clusters = new ArrayList<>();
 
 
-        File file = new File("nj.txt");
+        File file = new File("distanceMatrix.txt");
 
         try{
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -61,29 +61,12 @@ public class Main {
         }
 
 
-        NJ nj = new NJ(distanceMatrix, clusters);
-        nj.run();
+//        NJ nj = new NJ(distanceMatrix, clusters);
+//        nj.run();
 
-//        while (clusters.size() > 1){
-//            Pair<Cluster, Cluster> smallest = distanceMatrix.getNodesWithSmallestDistance();
-//
-//            Cluster cluster1 = smallest.getKey();
-//            Cluster cluster2 = smallest.getValue();
-//
-//            System.out.println(cluster1 + " " + cluster2);
-//
-//            Node branch1 = new Node();
-//            branch1.addChild(cluster1.getRoot());
-//            branch1.addChild(cluster2.getRoot());
-//            Cluster newCluster = new Cluster(cluster1, cluster2, branch1);
-//            distanceMatrix.update(cluster1, cluster2, newCluster);
-//            clusters.remove(cluster1);
-//            clusters.remove(cluster2);
-//            clusters.add(newCluster);
-//        }
-//
-//        System.out.println("end" + clusters);
-//
-//        printTree(clusters.get(0).getRoot());
+        UPGMA upgma = new UPGMA(distanceMatrix, clusters);
+        upgma.run();
+
+
     }
 }
