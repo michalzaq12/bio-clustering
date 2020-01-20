@@ -41,4 +41,13 @@ public class DistanceMatrix {
         return (int) Math.sqrt(this.matrix.size());
     }
 
+    public DistanceMatrix clone(){
+        DistanceMatrix newDistanceMatrix = new DistanceMatrix();
+        for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : matrix.entrySet()) {
+            Pair<Cluster, Cluster> key = entry.getKey();
+            newDistanceMatrix.add(key.getKey(), key.getValue(), entry.getValue());
+        }
+        return newDistanceMatrix;
+    }
+
 }

@@ -3,11 +3,13 @@ import java.util.LinkedList;
 public class Node {
     private String label = "•";
     private LinkedList<Node> children = new LinkedList<>();
+    private boolean isBranch = true;
 
     private double distanceToParent = 0.0;
 
     public Node(String label){
         this.label = label;
+        this.isBranch = false;
     }
 
     public Node(){}
@@ -45,6 +47,10 @@ public class Node {
 
     public String getLabelWithDistance(){
         return label + this.printDistanceToParent();
+    }
+
+    public boolean isBranch() {
+        return isBranch;
     }
 
     @Override

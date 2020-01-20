@@ -15,7 +15,7 @@ public class NJ {
         this.clusters = clusters;
     }
 
-    public void run() {
+    public Node run() {
 
         int n = this.size;
         while (n > 2) {
@@ -40,12 +40,9 @@ public class NJ {
         double lastNodeDistance = distances.getMatrix().get(new Pair<>(clusters.get(0), clusters.get(1)));
         Node root = clusters.get(0).getRoot();
         root.setDistanceToParent(lastNodeDistance);
-        root.addChild(subTree);
+        subTree.addChild(root);
 
-
-        TreePrinter printer = new TreePrinter(root);
-        System.out.print(printer.toString());
-
+        return subTree;
     }
 
 

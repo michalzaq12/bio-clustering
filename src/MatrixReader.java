@@ -52,11 +52,11 @@ public class MatrixReader {
     }
 
     public DistanceMatrix getDistanceMatrix(){
-        return distanceMatrix;
+        return distanceMatrix.clone();
     }
 
     public ArrayList<Cluster> getClusters(){
-        return clusters;
+        return new ArrayList<>(this.clusters);
     }
 
 }

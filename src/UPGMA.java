@@ -14,7 +14,7 @@ public class UPGMA {
     }
 
 
-    public void run() {
+    public Node run() {
         while (clusters.size() > 1) {
             Pair<Cluster, Cluster> smallest = distances.getNodesWithSmallestDistance();
 
@@ -23,13 +23,9 @@ public class UPGMA {
 
             Cluster newCluster = updateClusters(distances, cluster1, cluster2);
             distances = updateDinstances(distances, newCluster, cluster1, cluster2);
-
         }
 
-        Node root = clusters.get(0).getRoot();
-        TreePrinter printer = new TreePrinter(root);
-        System.out.println("--------------------------------------------------------------------");
-        System.out.print(printer.toString());
+        return clusters.get(0).getRoot();
     }
 
     private Cluster updateClusters(DistanceMatrix oldDistances, Cluster cluster1, Cluster cluster2){

@@ -17,7 +17,6 @@ public class AdjacencyMatrix {
             rootNode.setLabel("BRANCH_" + i);
             i++;
         }
-        System.out.println(rootNode.getLabel());
         uniqueLabels.add(rootNode.getLabel());
         rootNode.getChildren().forEach(this::makeLabelsUnique);
     }
