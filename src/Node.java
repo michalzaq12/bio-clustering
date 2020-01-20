@@ -1,8 +1,8 @@
+import java.util.LinkedList;
+
 public class Node {
     private String label = "•";
-
-    private Node child1 = null;
-    private Node child2 = null;
+    private LinkedList<Node> children = new LinkedList<>();
 
     private double distanceToParent = 0.0;
 
@@ -13,17 +13,21 @@ public class Node {
     public Node(){}
 
     public void addChild(Node child){
-        if(child1 == null) child1 = child;
-        else if(child2 == null) child2 = child;
-        else System.out.println("Error. To many children");
+        children.add(child);
     }
 
     public Node getChild1() {
-        return child1;
+        if(children.isEmpty()) return null;
+        return children.get(0);
     }
 
     public Node getChild2() {
-        return child2;
+        if(children.size() < 2) return null;
+        return children.get(1);
+    }
+
+    public LinkedList<Node> getChildren() {
+        return children;
     }
 
     public void setDistanceToParent(double distance){

@@ -28,7 +28,6 @@ public class NJ {
             Cluster cluster1 = smallestDistance.getKey();
             Cluster cluster2 = smallestDistance.getValue();
 
-            System.out.println("SMALLEST: " + cluster1 + " " + cluster2);
             Cluster newCluster = updateClusters(oldDistances, cluster1, cluster2);
             updateDistances(oldDistances, newCluster, cluster1, cluster2);
 
@@ -36,7 +35,7 @@ public class NJ {
             System.out.println("#-------------------------------------------------------------------------------------------");
         }
 
-
+        System.out.println(this.clusters);
         Node subTree = clusters.get(1).getRoot();
         double lastNodeDistance = distances.getMatrix().get(new Pair<>(clusters.get(0), clusters.get(1)));
         Node root = clusters.get(0).getRoot();
