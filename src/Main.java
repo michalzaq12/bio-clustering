@@ -11,6 +11,14 @@ public class Main {
         MatrixReader matrixReader2 = new MatrixReader("nj.txt");
         NJ nj = new NJ(matrixReader2.getDistanceMatrix(),matrixReader2.getClusters());
         nj.run();
+
+
+
+//        AdjacencyMatrix adjacencyMatrix = new AdjacencyMatrix(root);
+//        adjacencyMatrix.print();
+//        Node can = adjacencyMatrix.toCanonicalTree();
+//        TreePrinter printer2 = new TreePrinter(can);
+//        System.out.print(printer2.toString());
     }
 
 
