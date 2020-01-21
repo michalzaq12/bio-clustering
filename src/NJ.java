@@ -15,7 +15,7 @@ public class NJ {
         this.clusters = clusters;
     }
 
-    public Node run() {
+    public Node build() {
 
         int n = this.size;
         while (n > 2) {
@@ -32,10 +32,8 @@ public class NJ {
             updateDistances(oldDistances, newCluster, cluster1, cluster2);
 
             n--;
-            System.out.println("#-------------------------------------------------------------------------------------------");
         }
 
-        System.out.println(this.clusters);
         Node subTree = clusters.get(1).getRoot();
         double lastNodeDistance = distances.getMatrix().get(new Pair<>(clusters.get(0), clusters.get(1)));
         Node root = clusters.get(0).getRoot();

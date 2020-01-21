@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BinaryOperator;
 
 public class Main {
 
@@ -8,67 +7,54 @@ public class Main {
         MatrixReader matrixReader = new MatrixReader("test.txt");
 
         UPGMA upgma = new UPGMA(matrixReader.getDistanceMatrix(), matrixReader.getClusters());
-        Node upgmaTree = upgma.run();
+        Node upgmaTree = upgma.build();
         TreePrinter upgmaPrinter = new TreePrinter(upgmaTree);
+        System.out.println("\n__UPGMA__");
         System.out.print(upgmaPrinter);
 
         NJ nj = new NJ(matrixReader.getDistanceMatrix(), matrixReader.getClusters());
-        Node njTree = nj.run();
+        Node njTree = nj.build();
         TreePrinter njPrinter = new TreePrinter(njTree);
+        System.out.println("\n___NJ___");
         System.out.print(njPrinter);
 
 
 
         // ---------------------
-
-
         AdjacencyMatrix adjacencyMatrixUpgma = new AdjacencyMatrix(upgmaTree);
         Node upgmaCanonical = adjacencyMatrixUpgma.toCanonicalTree();
+        System.out.println("\n__UPGMA__");
         System.out.print(new TreePrinter(upgmaCanonical));
 
         AdjacencyMatrix adjacencyMatrixNj = new AdjacencyMatrix(njTree);
         Node njCanonical = adjacencyMatrixNj.toCanonicalTree();
+        System.out.println("\n___NJ___");
         System.out.print(new TreePrinter(njCanonical));
 
-        boolean areEqual = compareTrees(upgmaCanonical, njCanonical);
-        System.out.printf("Results are%s topologically equal", areEqual ? "" : " not");
+        boolean compatibility = compareTrees(upgmaCanonical, njCanonical);
+        System.out.println("\n Topological compatibility: " + compatibility);
     }
 
 
-    private static boolean compareTrees(Node aNode, Node bNode){
-        if (aNode.getChildren().size() == bNode.getChildren().size()) {
-            if (aNode.getChildren().size() == 0 && bNode.getChildren().size() == 0) {
-                if(aNode.isBranch() && bNode.isBranch()){
-                    return true;
-                }else if (aNode.getLabel().equals(bNode.getLabel())) {
-                    return true;
-                } else {
-                    return false;
-                }
+    private static boolean compareTrees(Node node1, Node node2){
+        if (node1.getChildren().size() == node2.getChildren().size()) {
+            if (node1.getChildren().size() == 0) {
+                if(node1.isBranch() && node2.isBranch()) return true;
+                else return node1.getLabel().equals(node2.getLabel());
             } else {
-                List<Boolean> comparisons = new ArrayList<>();
-                for (Node aChild : aNode.getChildren()) {
-                    List<Boolean> comparisons2 = new ArrayList<>();
-                    for (Node bChild : bNode.getChildren()) {
-                        boolean equals = compareTrees(aChild, bChild);
-                        comparisons2.add(equals);
+                List<Boolean> childrenComp = new ArrayList<>();
+                for (Node aChild : node1.getChildren()) {
+                    List<Boolean> childComp = new ArrayList<>();
+                    for (Node bChild : node2.getChildren()) {
+                        childComp.add(compareTrees(aChild, bChild));
                     }
-                    comparisons.add(comparisons2.stream().reduce(or()).get());
+                    childrenComp.add(childComp.stream().reduce((a, b) -> a || b).get());
                 }
-                Boolean result = comparisons.stream().reduce(and()).get();
-                return result;
+                return childrenComp.stream().reduce((a, b) -> a && b).get();
             }
         } else {
             return false;
         }
-    }
-
-    private static BinaryOperator<Boolean> or() {
-        return (a, b) -> a || b;
-    }
-
-    private static BinaryOperator<Boolean> and() {
-        return (a, b) -> a && b;
     }
 
 }

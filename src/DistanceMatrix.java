@@ -28,7 +28,7 @@ public class DistanceMatrix {
             }
         }
 
-        System.out.println("SMALLEST: " + out + " val: " + val);
+        //System.out.println("SMALLEST: " + out + " val: " + val);
 
         return out;
     }

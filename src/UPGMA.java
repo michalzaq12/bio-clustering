@@ -14,7 +14,7 @@ public class UPGMA {
     }
 
 
-    public Node run() {
+    public Node build() {
         while (clusters.size() > 1) {
             Pair<Cluster, Cluster> smallest = distances.getNodesWithSmallestDistance();
 
@@ -60,11 +60,8 @@ public class UPGMA {
             if(x.equals(cluster1) || x.equals(cluster2)) continue;
             if(y.equals(cluster1) || y.equals(cluster2)){
                 // UPDATE
-                System.out.println("distance update between: " + newCluster + " - " + x);
                 Double dis1 = matrix.get(new Pair<>(cluster1, x));
-                System.out.println(dis1 + " " + cluster1 + " - " + x);
                 Double dis2 = matrix.get(new Pair<>(cluster2, x));
-                System.out.println(dis2 + " " + cluster2 + " - " + x);
 
                 double cluster1Size = cluster1.getMembers().size();
                 double cluster2Size = cluster2.getMembers().size();
@@ -74,7 +71,6 @@ public class UPGMA {
             }else {
                 // REWRITE
                 newDistances.add(entry.getKey().getKey(), entry.getKey().getValue(), entry.getValue());
-                System.out.println(entry.getKey() + "  REWRITE " + entry.getValue());
             }
         }
 
