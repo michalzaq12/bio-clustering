@@ -44,23 +44,23 @@ public class NJ {
     }
 
 
-    private DistanceMatrix calculateQValues(DistanceMatrix initialDistance) {
+    private DistanceMatrix calculateQValues(DistanceMatrix distances) {
         DistanceMatrix qValues = new DistanceMatrix();
 
-        for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : initialDistance.getMatrix().entrySet()) {
+        for (Map.Entry<Pair<Cluster,Cluster>, Double> entry : distances.getMatrix().entrySet()) {
             Pair<Cluster,Cluster> clusters = entry.getKey();
             if(clusters.getKey().equals(clusters.getValue())) continue;
 
             double distance = entry.getValue();
             double sum1 = 0.0;
             double sum2 = 0.0;
-            for (Map.Entry<Pair<Cluster,Cluster>, Double> entry2 : initialDistance.getMatrix().entrySet()) {
+            for (Map.Entry<Pair<Cluster,Cluster>, Double> entry2 : distances.getMatrix().entrySet()) {
                 Pair<Cluster,Cluster> clusters2 = entry2.getKey();
 
                 if(clusters.getKey().equals(clusters2.getKey())) sum1+= entry2.getValue();
                 if(clusters.getValue().equals(clusters2.getKey())) sum2+= entry2.getValue();
             }
-            double q = (initialDistance.size() - 2) * distance - sum1 - sum2;
+            double q = (distances.size() - 2) * distance - sum1 - sum2;
             qValues.add(clusters.getKey(), clusters.getValue(), q);
         }
 
