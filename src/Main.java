@@ -4,7 +4,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        MatrixReader matrixReader = new MatrixReader("test.txt");
+        System.out.println(args[0]);
+        MatrixReader matrixReader = new MatrixReader(args[0]);
 
         UPGMA upgma = new UPGMA(matrixReader.getDistanceMatrix(), matrixReader.getClusters());
         Node upgmaTree = upgma.build();
